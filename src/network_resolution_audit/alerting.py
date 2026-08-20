@@ -6,6 +6,7 @@ import logging
 import logging.handlers
 from typing import Any
 
+# Global logger definition
 logger = logging.getLogger(__name__)
 
 
@@ -54,7 +55,7 @@ def send_webhook(
         return
 
     try:
-        import requests  # optional dependency
+        import requests  # type: ignore[import-untyped]
     except ImportError:
         logger.warning(
             "requests not installed – webhook skipped "
@@ -69,7 +70,7 @@ def send_webhook(
     }
 
     try:
-        resp = requests.post(url, json=payload, timeout=timeout)
+        resp = requests.post(url, json=payload, timeout=timeout)  # type: ignore[arg-type]
         resp.raise_for_status()
         logger.info("Webhook delivered to %s (%d findings)", url, len(findings))
     except Exception as exc:
