@@ -50,6 +50,7 @@ dev = [
     "ruff>=0.5",
     "mypy>=1.10",
     "types-setuptools",
+    "types-requests",
 ]
 alerting = [
     "requests>=2.31",
@@ -85,16 +86,3 @@ packages = ["network_resolution_audit"]
 testpaths = ["tests"]
 addopts = "-v --cov=network_resolution_audit --cov-report=term-missing"
 pythonpath = ["src"]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0",
-    "pytest-cov>=5.0",
-    "ruff>=0.5",
-    "mypy>=1.10",
-    "types-setuptools",
-    "types-requests",
-]
-alerting = [
-    "requests>=2.31",
-]
