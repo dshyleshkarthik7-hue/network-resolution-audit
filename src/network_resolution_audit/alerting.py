@@ -63,7 +63,7 @@ def send_webhook(
         return
 
     try:
-        import requests  # type: ignore[import-untyped]
+        import requests
     except ImportError:
         logger.warning(
             "requests not installed – webhook skipped "
@@ -78,7 +78,7 @@ def send_webhook(
     }
 
     try:
-        resp = requests.post(url, json=payload, timeout=timeout)  # type: ignore[arg-type]
+        resp = requests.post(url, json=payload, timeout=timeout)
         resp.raise_for_status()
         logger.info("Webhook delivered to %s (%d findings)", url, len(findings))
     except Exception as exc:
