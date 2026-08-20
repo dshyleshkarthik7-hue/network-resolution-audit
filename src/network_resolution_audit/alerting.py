@@ -6,7 +6,11 @@ import logging
 import logging.handlers
 from typing import Any
 
-# Global logger definition
+# Configure global logger with debug output
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -24,7 +28,11 @@ def send_syslog(
         handler = logging.handlers.SysLogHandler(address=address, facility=facility)
         syslog_logger = logging.getLogger("nra.syslog")
         syslog_logger.setLevel(logging.INFO)
-        syslog_logger.addHandler(handler)
+
+        # Avoid duplicate handlers
+        if not any(isinstance(h, logging.handlers.SysLogHandler) for h in syslog_logger.handlers):
+            syslog_logger.addHandler(handler)
+
         syslog_logger.propagate = False
 
         for finding in findings:
@@ -41,7 +49,7 @@ def send_syslog(
         handler.close()
         syslog_logger.removeHandler(handler)
     except Exception as exc:
-        logger.warning("Syslog delivery failed: %s", exc)
+        logger.exception("Syslog delivery failed: %s", exc)
 
 
 def send_webhook(
@@ -74,7 +82,7 @@ def send_webhook(
         resp.raise_for_status()
         logger.info("Webhook delivered to %s (%d findings)", url, len(findings))
     except Exception as exc:
-        logger.warning("Webhook delivery failed: %s", exc)
+        logger.exception("Webhook delivery failed: %s", exc)
 
 
 def emit_findings(
